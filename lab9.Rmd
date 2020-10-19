@@ -129,7 +129,10 @@ Write a SQL query that returns 10 rows of the variables
 `mpg`, `gear`, and `carb`.
 
 ```{r task_5}
-
+dbGetQuery(con, paste("SELECT mpg, gear, carb",
+                      "FROM mtcarsdb", 
+                      "Limit 10")
+           )
 ```
 
 #### Task 6
@@ -138,7 +141,10 @@ Write a SQL query that returns the variables `mpg`, `gear`, and `carb`
 ordered in ascending order by `carb`.
 
 ```{r task_6}
-
+dbGetQuery(con, paste("SELECT mpg, gear, carb",
+                      "FROM mtcarsdb", 
+                      "ORDER BY carb")
+           )
 ```
 
 #### Task 7
@@ -147,7 +153,10 @@ Write a SQL query that returns the variables `mpg`, `cyl`, and `carb`, where
 `carb` is greater than 2 and `cyl` is greater than 4.
 
 ```{r task_7}
-
+dbGetQuery(con, paste("SELECT mpg, cyl, carb",
+                      "FROM mtcarsdb", 
+                      "WHERE carb > 2 AND cyl > 4")
+           )
 ```
 
 #### Task 8
@@ -156,6 +165,11 @@ Write a SQL query that returns the mean `mpg`, mean `hp`, and mean `wt`
 grouped by `cyl` and then `carb`.
 
 ```{r task_8}
+dbGetQuery(con, paste("SELECT AVG(mpg), AVG(hp), AVG(wt)",
+                      "FROM mtcarsdb", 
+                      "GROUP BY cyl AND carb")
+           )
+
 
 ```
 
@@ -252,6 +266,13 @@ the most strikeouts in a season since the year 2000. Also, display each
 player's salary for that season in the resulting table.
 
 ```{r task_9}
+con %>% 
+  dbGetQuery(paste("SELECT playerID, SO, salary",
+                      "FROM Batting JOIN Salaries USING(yearID, playerID)",
+                      "WHERE yearID >= 2000",
+                      "GROUP BY playerID",
+                      "ORDER BY SO DESC",
+                      "LIMIT 10"))
 
 ```
 
@@ -262,7 +283,12 @@ matching `yearID` and `teamID`. Find the 10 highest salaries by
 team in 2016.
 
 ```{r task_10}
-
+con %>% 
+  dbGetQuery(paste("SELECT playerID, salary",
+                    "FROM Salaries JOIN Teams USING(yearID, teamID)",
+                    "WHERE yearID = 2016",
+                    "ORDER BY salary DESC",
+                    "LIMIT 10"))
 ```
 
 ## Close connection
